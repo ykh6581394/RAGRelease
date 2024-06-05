@@ -5,6 +5,8 @@ import tiktoken
 from loguru import logger
 import pandas as pd
 import os
+import io
+import zipfile
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 
@@ -65,7 +67,24 @@ def main():
             error_all, title_all, body_all = main2(sel_url, eng_domain, jap_domain)
             urls_all["error"] = error_all
             urls_all["title"] = title_all
-
+            
+            folder_path = './word/'
+            buf = io.BytesIO()
+            with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                for root, dirs, files in os.walk(folder_path):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        arcname = os.path.relpath(file_path, start=folder_path)
+                        zipf.write(file_path, arcname)
+            
+    
+            st.download_button(
+                            label = "[Download] Download zip",
+                            data = buf.getvalue(),
+                            file_name = "mydownload.zip"
+                            )
+            
+            
             st.table(urls_all)
          
     with st.sidebar:

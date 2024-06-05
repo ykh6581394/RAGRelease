@@ -82,13 +82,13 @@ def reReturner(url_org, domain_finder_new, eng_domain, jap_domain):
         return "Blockerror", "notitle", "nobody", "nodate"
 
 
-def docxSaver(title, body, num):
+def docxSaver(title, body, error, num):
     
     document = Document()
     document.add_heading(title, level=1)
     document.add_paragraph(body)
     
-    document.save("./word/article_"+str(num)+'.docx')
+    document.save("./word/"+error+"_"+str(num)+'.docx')
 
 def crawler(url_org, eng_domain, jap_domain, num):
     
@@ -98,7 +98,7 @@ def crawler(url_org, eng_domain, jap_domain, num):
 
     if newscategory == "media":
         error0, title0, body0, date0 =  reReturner(url_org, domain_finder_new, eng_domain, jap_domain)
-        docxSaver(title0, body0, num)
+        docxSaver(title0, body0, error0,num)
         return url_org, error0, title0, body0, date0
        
     elif newscategory == "naver":
@@ -111,7 +111,7 @@ def crawler(url_org, eng_domain, jap_domain, num):
                 domain_finder = web.split("/")[2]
                 domain_finder_new = domainSanitize(domain_finder)
                 error0, title0, body0, date0 = reReturner(web, domain_finder_new, eng_domain, jap_domain)
-                docxSaver(title0, body0, num)
+                docxSaver(title0, body0,error0, num)
                 return web, error0, title0, body0, date0
                 
             except:
@@ -127,7 +127,7 @@ def crawler(url_org, eng_domain, jap_domain, num):
                 domain_finder = web.split("/")[2]
                 domain_finder_new = domainSanitize(domain_finder)
                 error0, title0, body0, date0 = reReturner(web, domain_finder_new, eng_domain, jap_domain)
-                docxSaver(title0, body0, num)
+                docxSaver(title0, body0,error0, num)
                 return web, error0, title0, body0, date0
           
             except:
@@ -142,7 +142,7 @@ def crawler(url_org, eng_domain, jap_domain, num):
                 domain_finder = web.split("/")[2]
                 domain_finder_new = domainSanitize(domain_finder)
                 error0, title0, body0, date0 = reReturner(web, domain_finder_new, eng_domain, jap_domain)
-                docxSaver(title0, body0, num)
+                docxSaver(title0, body0,error0, num)
                 return web, error0, title0, body0, date0
             except:
                 return url_org, "Naver news HTML Error" , None, None, None
